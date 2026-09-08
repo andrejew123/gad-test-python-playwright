@@ -26,6 +26,10 @@ class CommentPayload(TypedDict):
     date: str
 
 
+def _current_utc_timestamp() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+
 def get_authorization_header(request: APIRequestContext) -> dict[str, str]:
     login_url = "/api/login"
     response = request.post(
@@ -44,7 +48,7 @@ def prepare_article_payload() -> ArticlePayload:
     return {
         "title": random_article.title,
         "body": random_article.body,
-        "date": datetime.now(timezone.utc).isoformat(),
+        "date": _current_utc_timestamp(),
         "image": "",
     }
 
@@ -54,5 +58,5 @@ def prepare_comment_payload(article_id: int) -> CommentPayload:
     return {
         "article_id": article_id,
         "body": random_comment.body,
-        "date": datetime.now(timezone.utc).isoformat(),
+        "date": _current_utc_timestamp(),
     }
