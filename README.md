@@ -24,6 +24,10 @@ pytest tests/api                    # API tests only
 pytest -m logged                    # only tests requiring an authenticated session
 pytest -m "not logged"              # only tests that don't require login
 pytest -k "login"                   # tests matching a keyword
+python -m ruff check src config conftest.py  # static analysis (lint)
+python -m ruff check tests --select E501     # enforce max line length in tests
+python -m ruff check . --fix                 # auto-fix lint issues
+python -m ruff format                        # auto-fix formatting issues
 ```
 
 HTML/trace artifacts are written to `test-results/` (traces, screenshots, videos on failure).
@@ -60,9 +64,9 @@ was captured by logging in once per session (equivalent to the TS `setup` projec
 ```python
 import pytest
 
+
 @pytest.mark.logged
-def test_something(articles_page):
-    ...
+def test_something(articles_page): ...
 ```
 
 ## Conventions
