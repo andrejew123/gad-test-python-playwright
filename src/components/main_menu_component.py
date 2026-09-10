@@ -6,12 +6,22 @@ class MainMenuComponent:
 
     def __init__(self, page: Page) -> None:
         self.page = page
-        self.comments_button = page.get_by_test_id("open-comments")
-        self.articles_button = page.get_by_test_id("open-articles")
+        self.comments_button = page.locator(
+            '[data-testid="open-comments"], a[href*="comments.html"], a[href*="/comments"]'
+        ).first
+        self.articles_button = page.locator(
+            '[data-testid="open-articles"], a[href*="articles.html"], a[href*="/articles"]'
+        ).first
         self.home_page_link = page.get_by_role("link", name="🦎 GAD")
 
     def click_comments_button(self):
         from src.pages.comments_page import CommentsPage
+
+        # On the home dashboard, comments navigation is reached through Articles first.
+        if self.comments_button.count() == 0:
+            if self.articles_button.count() == 0:
+                raise RuntimeError("Comments navigation item is not available on this page.")
+            self.articles_button.click()
 
         self.comments_button.click()
         return CommentsPage(self.page)

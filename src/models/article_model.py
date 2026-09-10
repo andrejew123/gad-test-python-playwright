@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class AddArticleModel:
+class AddArticleModel(BaseModel):
     title: str
     body: str

@@ -1,4 +1,4 @@
-from src.utils.api_util import API_LINKS
+from src.api.utils.api_util import API_LINKS
 
 
 class TestCommentsSmoke:

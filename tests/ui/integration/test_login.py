@@ -1,4 +1,3 @@
-import pytest
 from faker import Faker
 
 from src.models.user_model import LoginUserModel

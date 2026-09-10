@@ -1,4 +1,5 @@
-from src.utils.api_util import API_LINKS, get_authorization_header
+from src.api.utils.api_util import API_LINKS
+from src.api.factories.authorization_header_api_factory import get_authorization_header
 
 
 class TestArticlesSmoke:

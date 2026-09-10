@@ -1,6 +1,23 @@
+import time
+
 import pytest
 
-from src.utils.api_util import API_LINKS, get_authorization_header, prepare_article_payload
+from src.api.utils.api_util import API_LINKS
+from src.api.factories.article_payload_api_factory import prepare_article_payload
+from src.api.factories.authorization_header_api_factory import get_authorization_header
+
+
+def wait_until(action, condition, timeout=2.0, interval=0.1):
+    deadline = time.monotonic() + timeout
+    while True:
+        result = action()
+
+        if condition(result):
+            return result
+
+        if time.monotonic() >= deadline:
+            raise AssertionError(f"Condition not met within {timeout}s")
+        time.sleep(interval)
 
 
 class TestArticlesIntegration:
@@ -22,6 +39,13 @@ class TestArticlesIntegration:
             self.article_data = prepare_article_payload()
             self.response_article = api_request_context.post(
                 API_LINKS["articles_url"], headers=self.headers, data=self.article_data
+            )
+            article_json = self.response_article.json()
+            article_id = article_json["id"]
+            wait_until(
+                action=lambda: api_request_context.get(f"{API_LINKS['articles_url']}/{article_id}"),
+                condition=lambda response: response.status == 200,
+                timeout=2,
             )
 
         def test_should_create_article_with_logged_in_user(self):

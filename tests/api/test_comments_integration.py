@@ -1,13 +1,12 @@
 import pytest
-
-from conftest import api_request_context
-from src.utils.api_util import (
-    API_LINKS,
-    get_authorization_header,
-    prepare_article_payload,
-    prepare_comment_payload,
-)
 from playwright.sync_api import expect
+
+from src.api.utils.api_util import (
+    API_LINKS,
+)
+from src.api.factories.comments_payload_api_factory import prepare_comment_payload
+from src.api.factories.article_payload_api_factory import prepare_article_payload
+from src.api.factories.authorization_header_api_factory import get_authorization_header
 
 
 class TestCommentsIntegration:
@@ -52,10 +51,14 @@ class TestCommentsIntegration:
         expected_status_code = 200
 
         # Act
-        response_comment = api_request_context.post(API_LINKS["comments_url"], headers=self.headers, data=self.comment_data)
+        response_comment = api_request_context.post(
+            API_LINKS["comments_url"], headers=self.headers, data=self.comment_data
+        )
         comment_json = response_comment.json()
         comment_id = comment_json["id"]
-        response_delete = api_request_context.delete(f"{API_LINKS['comments_url']}/{comment_id}", headers=self.headers)
+        response_delete = api_request_context.delete(
+            f"{API_LINKS['comments_url']}/{comment_id}", headers=self.headers
+        )
 
         # Assert
         assert response_delete.status == expected_status_code
@@ -66,11 +69,15 @@ class TestCommentsIntegration:
         expected_not_deleted_status_code = 200
 
         # Act
-        response_comment = api_request_context.post(API_LINKS["comments_url"], headers=self.headers, data=self.comment_data)
+        response_comment = api_request_context.post(
+            API_LINKS["comments_url"], headers=self.headers, data=self.comment_data
+        )
         comment_json = response_comment.json()
         comment_id = comment_json["id"]
         response_delete = api_request_context.delete(f"{API_LINKS['comments_url']}/{comment_id}")
-        response_get_not_deleted_comment = api_request_context.get(f"{API_LINKS['comments_url']}/{comment_id}")
+        response_get_not_deleted_comment = api_request_context.get(
+            f"{API_LINKS['comments_url']}/{comment_id}"
+        )
 
         # Assert
         expect(response_get_not_deleted_comment).to_be_ok()
