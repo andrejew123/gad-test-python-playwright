@@ -1,30 +1,16 @@
-import time
-
 import pytest
 
+from api.factories.article_create_factory import wait_until
 from src.api.utils.api_util import API_LINKS
 from src.api.factories.article_payload_api_factory import prepare_article_payload
 from src.api.factories.authorization_header_api_factory import get_authorization_header
-
-
-def wait_until(action, condition, timeout=2.0, interval=0.1):
-    deadline = time.monotonic() + timeout
-    while True:
-        result = action()
-
-        if condition(result):
-            return result
-
-        if time.monotonic() >= deadline:
-            raise AssertionError(f"Condition not met within {timeout}s")
-        time.sleep(interval)
 
 
 class TestArticlesIntegration:
     def test_should_not_create_article_without_logged_in_user(self, api_request_context):
         # Arrange
         expected_status_code = 401
-        article_data = prepare_article_payload()
+        article_data = prepare_article_payload().model_dump()
 
         # Act
         response = api_request_context.post(API_LINKS["articles_url"], data=article_data)
@@ -36,7 +22,7 @@ class TestArticlesIntegration:
         @pytest.fixture(autouse=True)
         def _setup(self, api_request_context):
             self.headers = get_authorization_header(api_request_context)
-            self.article_data = prepare_article_payload()
+            self.article_data = prepare_article_payload().model_dump()
             self.response_article = api_request_context.post(
                 API_LINKS["articles_url"], headers=self.headers, data=self.article_data
             )

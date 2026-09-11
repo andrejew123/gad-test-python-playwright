@@ -13,13 +13,13 @@ class TestCommentsIntegration:
     @pytest.fixture(autouse=True)
     def _setup(self, api_request_context):
         self.headers = get_authorization_header(api_request_context)
-        article_data = prepare_article_payload()
+        article_data = prepare_article_payload().model_dump()
         response_article = api_request_context.post(
             API_LINKS["articles_url"], headers=self.headers, data=article_data
         )
         article_json = response_article.json()
         self.article_id = article_json["id"]
-        self.comment_data = prepare_comment_payload(self.article_id)
+        self.comment_data = prepare_comment_payload(self.article_id).model_dump()
 
     def test_should_create_comment_with_logged_in_user(self, api_request_context):
         # Arrange

@@ -1,7 +1,7 @@
-from typing import TypedDict
+from pydantic import BaseModel
 
 
-class ArticlePayload(TypedDict):
+class ArticlePayload(BaseModel):
     title: str
     body: str
     date: str

@@ -1,7 +1,7 @@
-from typing import TypedDict
+from pydantic import BaseModel
 
 
-class CommentPayload(TypedDict):
+class CommentPayload(BaseModel):
     article_id: int
     body: str
     date: str

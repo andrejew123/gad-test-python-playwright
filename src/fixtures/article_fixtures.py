@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.factories.articles_factory import prepare_random_article
+from src.factories.articles_payload_factory import prepare_random_article
 from src.models.article_model import AddArticleModel
 
 

@@ -1,7 +1,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from src.factories.comment_factory import prepare_random_comment
+from src.factories.comment_payload_factory import prepare_random_comment
 
 
 @pytest.mark.logged

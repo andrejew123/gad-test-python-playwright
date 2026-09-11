@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.factories.comment_factory import prepare_random_comment
+from src.factories.comment_payload_factory import prepare_random_comment
 from src.models.comment_model import AddCommentModel
 
 
